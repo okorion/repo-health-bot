@@ -11,6 +11,7 @@ permissions:
 jobs:
   redteam-review:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.state == 'open'
     steps:
       - uses: actions/checkout@v5
         with:
@@ -21,12 +22,12 @@ jobs:
           python-version: "3.13"
 
       - name: Fetch base branch
-        run: git fetch origin "${{ github.base_ref }}" --depth=1
+        run: git fetch origin "${{ github.base_ref }}"
 
       - name: Run level 3 auto-merge guard
         run: |
           python scripts/auto_merge_guard.py \
-            --base-ref "origin/${{ github.base_ref }}" \
+            --base-ref "${{ github.event.pull_request.base.sha }}" \
             --head-ref HEAD \
             --base-branch "${{ github.base_ref }}" \
             --head-branch "${{ github.head_ref }}" \
@@ -37,7 +38,7 @@ jobs:
         run: |
           python scripts/redteam_review.py \
             --guard-report "$RUNNER_TEMP/auto-merge-guard.json" \
-            --base-ref "origin/${{ github.base_ref }}" \
+            --base-ref "${{ github.event.pull_request.base.sha }}" \
             --head-ref HEAD \
             --output "$RUNNER_TEMP/redteam-review.json" \
             --summary-md "$RUNNER_TEMP/redteam-review.md"
@@ -49,8 +50,16 @@ jobs:
         run: |
           {
             echo "<!-- repo-health-bot-redteam-review -->"
-            cat "$RUNNER_TEMP/auto-merge-guard.md"
+            if [ -f "$RUNNER_TEMP/auto-merge-guard.md" ]; then
+              cat "$RUNNER_TEMP/auto-merge-guard.md"
+            else
+              echo "Auto Merge Guard summary was not created."
+            fi
             echo
-            cat "$RUNNER_TEMP/redteam-review.md"
+            if [ -f "$RUNNER_TEMP/redteam-review.md" ]; then
+              cat "$RUNNER_TEMP/redteam-review.md"
+            else
+              echo "Redteam Review summary was not created."
+            fi
           } > "$RUNNER_TEMP/redteam-comment.md"
           gh pr comment "${{ github.event.pull_request.number }}" --body-file "$RUNNER_TEMP/redteam-comment.md"

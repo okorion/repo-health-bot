@@ -55,7 +55,7 @@ jobs:
           BASE_BRANCH="$(python -c "import json, os; print(json.load(open(os.environ['RUNNER_TEMP'] + '/pr.json', encoding='utf-8'))['baseRefName'])")"
           HEAD_BRANCH="$(python -c "import json, os; print(json.load(open(os.environ['RUNNER_TEMP'] + '/pr.json', encoding='utf-8'))['headRefName'])")"
 
-          git fetch origin "$BASE_BRANCH" --depth=1
+          git fetch origin "$BASE_BRANCH"
 
           python scripts/auto_merge_guard.py \
             --base-ref "origin/$BASE_BRANCH" \
