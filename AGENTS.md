@@ -4,6 +4,7 @@ This repository is used for a scheduled Codex self-improvement workflow.
 
 Rules for automated runs:
 
+- Use Korean for pull request titles, pull request bodies, run summaries, and review explanations by default.
 - Make one small, reviewable improvement per run.
 - Prefer changes covered by existing checks.
 - Do not auto-merge changes.
@@ -11,5 +12,4 @@ Rules for automated runs:
 - Do not add dependencies unless the change is explicitly necessary and small.
 - Do not perform broad refactors.
 - Keep pull requests draft by default.
-- Explain the selected improvement and verification in the PR body.
-
+- Explain the selected improvement and verification in Korean in the PR body.
