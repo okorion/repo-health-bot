@@ -97,6 +97,38 @@ class AutoMergePolicyTest(unittest.TestCase):
 
         self.assertTrue(decision["should_merge"])
 
+    def test_merge_decision_blocks_merge_conflicts(self) -> None:
+        pr = {
+            "isDraft": True,
+            "headRefName": "codex/example",
+            "baseRefName": "main",
+            "mergeStateStatus": "DIRTY",
+            "statusCheckRollup": [
+                {
+                    "name": "test",
+                    "workflowName": "CI",
+                    "status": "COMPLETED",
+                    "conclusion": "SUCCESS",
+                },
+                {
+                    "name": "redteam-review",
+                    "workflowName": "Redteam Review",
+                    "status": "COMPLETED",
+                    "conclusion": "SUCCESS",
+                },
+            ],
+        }
+        guard_report = {"passed": True, "auto_merge_allowed": True}
+
+        decision = merge_decision.decide(
+            pr,
+            guard_report,
+            required_checks=["test", "redteam-review"],
+        )
+
+        self.assertFalse(decision["should_merge"])
+        self.assertIn("pull request has merge conflicts", decision["reasons"])
+
 
 if __name__ == "__main__":
     unittest.main()
