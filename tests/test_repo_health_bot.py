@@ -69,6 +69,16 @@ class RepoHealthBotTest(unittest.TestCase):
             self.assertEqual(caught.exception.code, 2)
             self.assertIn("path is not a directory", stderr.getvalue())
 
+    def test_help_includes_examples_and_output_guidance(self) -> None:
+        help_text = build_parser().format_help()
+
+        self.assertIn("Examples:", help_text)
+        self.assertIn("repo-health-bot C:\\path\\to\\repo", help_text)
+        self.assertIn("repo-health-bot . --json", help_text)
+        self.assertIn("Output:", help_text)
+        self.assertIn("Markdown is the default", help_text)
+        self.assertIn("Use --json", help_text)
+
     def test_main_prints_json_report(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             tmp_path = Path(temp_dir)
