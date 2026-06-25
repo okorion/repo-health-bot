@@ -140,7 +140,18 @@ def repository_directory(value: str) -> Path:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Generate a small repository health report.")
+    parser = argparse.ArgumentParser(
+        description="Generate a small repository health report in Markdown or JSON.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""Examples:
+  repo-health-bot
+  repo-health-bot C:\\path\\to\\repo
+  repo-health-bot . --json
+
+Output:
+  Markdown is the default for terminal reading.
+  Use --json when another command or script will parse the report.""",
+    )
     parser.add_argument(
         "path",
         nargs="?",
