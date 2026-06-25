@@ -2,6 +2,10 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+.env
+.ruff_cache/
+*.egg-info/
 dist/
 build/
-
+runs/*.jsonl
+runs/*.md
