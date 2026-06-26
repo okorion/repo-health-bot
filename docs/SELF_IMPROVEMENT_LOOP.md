@@ -64,7 +64,7 @@ flowchart TD
 
 로컬 runner는 다음 값을 기본값으로 받을 수 있습니다.
 
-- 대상 repo: `okorion/repo-health-bot`
+- 대상 repo: `overtura/repo-health-bot`
 - 모델: `gpt-5.5`
 - reasoning effort: `xhigh`
 - service tier: `fast`
@@ -80,13 +80,13 @@ runner는 이 저장소의 `.codex/self-improve/run-checks.ps1`을 검증 명령
 GitHub CLI로는 다음처럼 볼 수 있습니다.
 
 ```bash
-gh -R okorion/repo-health-bot pr list --state open
+gh -R overtura/repo-health-bot pr list --state open
 ```
 
 특정 PR의 체크 상태는 다음처럼 확인합니다.
 
 ```bash
-gh -R okorion/repo-health-bot pr checks PR_NUMBER
+gh -R overtura/repo-health-bot pr checks PR_NUMBER
 ```
 
 ## 운영 규칙
